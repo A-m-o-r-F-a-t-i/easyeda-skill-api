@@ -1,0 +1,15 @@
+{
+  "name": "easyeda-api",
+  "version": "2.3.0",
+  "description": "EasyEDA Pro generic API reference, WebSocket bridge, extension development, and document-source format skill",
+  "type": "module",
+  "scripts": {
+    "server": "node scripts/bridge-server.mjs"
+  },
+  "dependencies": {
+    "ws": "8.18.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

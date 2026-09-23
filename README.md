@@ -1,4 +1,4 @@
-> Installed-package users: read [SKILL.md](SKILL.md) for the current workflow and the bundled `references/` for API signatures. The build/development commands below describe the upstream source checkout and are not prerequisites for using this installed Skill.
+> API Skill 2.4.0: common PCB operations use PCB MCP 3.0 first. Read [SKILL.md](SKILL.md) for capability-gap diagnosis, extension development and Bridge details. The upstream raw-API examples below are development references, not the normal PCB editing route.
 
 [English](#) | [简体中文](./README.zh-Hans.md)
 

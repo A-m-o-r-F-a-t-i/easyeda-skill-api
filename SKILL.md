@@ -1,7 +1,7 @@
 ---
 name: easyeda-api
 description: 嘉立创EDA通用公开API、Bridge运行、Gateway Protocol v1/v2协商、精确窗口/工程/文档身份、异步返回值和有界文件传输。用于启动、重连、版本兼容、扩展开发与API缺口诊断；PCB设计与类型化执行归独立PCB Skill/MCP，原理图设计归原理图增强Skill。
-version: 2.3.0
+version: 2.4.0
 ---
 
 # 嘉立创 EDA 通用 API
@@ -35,10 +35,10 @@ node scripts/bridge-server.mjs
 
 ## 3. 按能力选择通道
 
-按任务意图优先使用相应领域的类型化 MCP。MCP 内部协商支持的 Gateway 操作与版本。
-已经验证的公开 API 兼容路径可保留，不要求每项只读任务按固定通道顺序重复执行。
-Protocol v2 操作在当前 Gateway 不支持时返回 CLIENT_UNSUPPORTED；受保护写入不得静默降为无守卫调用。
-裸 execute 保留给旧版兼容和明确的公开 API 诊断，不用于隐藏未验证的生产写入逻辑。
+常见 PCB 操作必须优先使用 PCB MCP 3.0 简化接口。位号、焊盘端点、图层名、批量几何、原生参数和执行结果由 MCP 封装，AI 不重新输出同等 API 脚本。
+MCP 是 API 的上层操作封装，AI 自主决定设计和分析时机。不要把底层协议的守卫、代次或执行凭证要求重新加回常规 MCP 参数。
+只有明确的封装缺口、MCP 实现故障或底层诊断才展开本 Skill。缺失常见操作应补进 MCP，临时 API 调用不成为后续默认路径；无需故意制造失败来证明缺口。
+MCP 内部选择已实现的原生调用路径。历史 Protocol v2 受保护操作仍遵守它自己的协议，不能静默伪造成功或绕过权限拒绝；它不限制 v3 显式编辑封装的正常工作流。
 浏览器只补充已确认无稳定 API 的应用 UI 或真实渲染，不代替已有类型化的读取、导出与编辑能力。
 
 Protocol v1 保留 execute/result/error 和原有 HTTP 连接入口。
@@ -47,14 +47,10 @@ Protocol v2 使用 `/rpc`、能力注册、事件状态及有界文件封装。�
 
 ## 4. 状态与异步执行
 
-准备状态包含 Bridge generation、Gateway generation、changeEpoch、源码哈希以及涉及对象的旧值。
-Bridge 或 Gateway 重启后 generation 改变，旧计划失效；epoch 数字相同不代表同一会话状态。
-当前 PCB BETA 图元事件缺少可靠文档身份，因此窗口内保守失效，eventCoverage 保留 partial。
-事件队列有界，截断返回 oldestAvailableSequence 与 eventsTruncated，不能把丢失历史当成没有修改。
-
-每次生产写入使用明确 executionId。相同 ID 和内容命中执行记录时返回先前结果；不同内容复用同一 ID 被拒绝。
-超时、断开或 PARTIAL_SUCCESS 都先只读检查已完成对象，不自动重放写请求。
-同一编辑器的应用调用串行化，无法锁住用户手工编辑；仍然需要执行前状态核对和独立读回。
+PCB MCP 3.0 在内部处理对象定位、必要的身份读取、实际返回、批量分片和执行记录。普通请求不提供 guard、expected 或 executionId，不在每批后重复整板读取。
+历史协议的 generation、changeEpoch、源码摘要用于它自己的并发和恢复语义；重启后的相同 epoch 不代表相同会话。事件可能缺少可靠文档身份或发生截断，不能把未知历史当成没有变化。
+超时、断开和部分成功利用实际回执与必要局部读取处理，不自动重放写请求。MCP 内部执行记录不是原子事务或完整 PCB 备份。
+当前编辑 API 无法跨客户端锁住人工编辑。明确目标、只改指定字段并报告实际结果；设计判断与是否进一步分析交给 AI。
 明确权限拒绝不转成其他入口重试。错误码、恢复条件见 [事件与代次](references/event-and-change-epoch.md)。
 
 ## 5. 数据与文件
@@ -75,7 +71,7 @@ DSN resolution 表示精度，不能直接当作坐标除数。领域解析与�
 使用与实际客户端匹配的公开类型资料，读取准确签名、枚举、坐标单位和返回类型后再调用。
 方法存在但行为未验证时进行只读或可恢复最小测试，记录真实错误与后置结果。
 ECO、源文档替换和高影响修改需要实际内容备份；恢复时不能用全局撤销覆盖其他编辑。
-API2.3、Bridge2、Gateway1.1与PCB MCP2形成兼容发布链，客户端基线保持3.2.186。
+API Skill2.4、Bridge2、Gateway1.1与PCB MCP3组成当前发布组合；PCB 简化数据接口已在4.1.60做只读联调。历史3.2.186记录仅对对应客户端适用，不能由只读成功宣称所有写操作实测通过。
 SDK scaffold 迁移与协议功能分开发布；当前固定 pro-api-types0.4.25，不用升级类型号替代运行测试。
 兼容记录见 [能力矩阵](references/gateway-capability-matrix.md)、[版本兼容](references/version-compatibility.md)。
 

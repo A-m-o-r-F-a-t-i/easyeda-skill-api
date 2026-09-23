@@ -1,4 +1,4 @@
-> 已安装包的当前使用流程以 [SKILL.md](SKILL.md) 为准，API签名读取包内 `references/`。下文的构建和开发命令针对上游源码仓库，不是使用已安装Skill的前置步骤。
+> API Skill 2.4.0：常见 PCB 操作优先使用 PCB MCP 3.0。此 Skill 用于明确的能力缺口、扩展开发与 Bridge 诊断，入口为 [SKILL.md](SKILL.md)。下文原生 API 示例是上游开发参考，不是日常 PCB 编辑路径。
 
 [English](./README.md) | [简体中文](#)
 

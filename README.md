@@ -1,4 +1,4 @@
-> API Skill 2.4.1: common PCB operations use PCB MCP 3.0.1 first, with mil as the normal PCB coordinate default. Read [SKILL.md](SKILL.md) for capability-gap diagnosis, extension development and Bridge details. The upstream raw-API examples below are development references, not the normal PCB editing route.
+> API Skill 2.5.0: common PCB operations use PCB MCP 4.1.0 first, with one 17-tool MIL-only interface and durable execution receipts. Read [SKILL.md](SKILL.md) for capability-gap diagnosis, extension development and Bridge details. The upstream raw-API examples below are development references, not the normal PCB editing route.
 
 [English](#) | [简体中文](./README.zh-Hans.md)
 
